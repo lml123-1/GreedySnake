@@ -1,10 +1,11 @@
+#include "modSnake.h"
 
-#include <iostream>
-#include "snake.h"
+
 
 int main()
 {
-    //std::cout << "this is hello world!\n";
+    modSnakeInit();
+    modSnakeRun();
     return 0;
 }
 

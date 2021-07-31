@@ -1,5 +1,7 @@
-﻿  main.cpp
-  snake.cpp
-  正在生成代码...
+﻿  snake.cpp
+e:\study file\greedysnake\greedysnake\src\snake.cpp : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+e:\study file\greedysnake\greedysnake\src\snake.cpp(127): warning C4267: “=”: 从“size_t”转换到“unsigned short”，可能丢失数据
+e:\study file\greedysnake\greedysnake\src\snake.cpp(128): warning C4267: “=”: 从“size_t”转换到“unsigned short”，可能丢失数据
+e:\study file\greedysnake\greedysnake\src\snake.cpp(148): warning C4267: “=”: 从“size_t”转换到“unsigned short”，可能丢失数据
   GreedySnake.vcxproj -> E:\study file\GreedySnake\GreedySnake\Debug\GreedySnake.exe
   GreedySnake.vcxproj -> E:\study file\GreedySnake\GreedySnake\Debug\GreedySnake.pdb (Partial PDB)

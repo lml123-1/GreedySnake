@@ -21,10 +21,36 @@
     <ClCompile Include="..\src\snake.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\modSnake.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\snake.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\modSnake.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\Image\down.jpg">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="..\Image\left.jpg">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="..\Image\right.jpg">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="..\Image\up.jpg">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="..\Image\snake.png">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="..\Image\food.png">
+      <Filter>资源文件</Filter>
+    </Image>
   </ItemGroup>
 </Project>
