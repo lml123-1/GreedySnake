@@ -1,4 +1,5 @@
 #include "snake.h"
+#include <windows.h>
 #include <time.h>
 #include <fstream>
 
@@ -17,7 +18,12 @@
 #define RRIGHT  _MYSNAKEINFO.GetImag("../Image/right.jpg")
 #define RUP     _MYSNAKEINFO.GetImag("../Image/up.jpg")
 #define RSNAKE  _MYSNAKEINFO.GetImag("../Image/snake.png")
-#define RFOOD  _MYSNAKEINFO.GetImag("../Image/food.png")
+#define RFOOD   _MYSNAKEINFO.GetImag("../Image/food.png")
+
+#define KEYDOWN     0x28
+#define KEYLEFT     0x25
+#define KEYRIGHT    0x27
+#define KEYUP       0x26
 
 MYSNAKEINFO(gSnake)
 gSnake::gSnake()
@@ -71,7 +77,7 @@ void gSnake::SnakeRun()
 
 }
 
-void gSnake::LeftButtonDown()
+void gSnake::LeftButtonDown() //左键点击事件
 {
     if (m_message.x > START_X && m_message.y > START_Y && m_message.x < (WIDTH - BIGWID - 10) && m_message.y < START_Y + ((HEIGHT - 2 * BIGWID - 40) / 3))
     {
@@ -82,7 +88,7 @@ void gSnake::LeftButtonDown()
     }
     else if (m_message.x > HISTORY_X && m_message.y > HISTORY_Y && m_message.x < (WIDTH - BIGWID - 10) && m_message.y < HISTORY_Y + ((HEIGHT - 2 * BIGWID - 40) / 3))
     {
-        //rectangle(m_message.x - 10, m_message.y - 10, m_message.x + 10, m_message.y + 10); //测试
+        rectangle(m_message.x - 10, m_message.y - 10, m_message.x + 10, m_message.y + 10); //测试
     }
     else if (m_message.x > GOVER_X && m_message.y > GOVER_Y && m_message.x < (WIDTH - BIGWID - 10) && m_message.y < GOVER_Y + ((HEIGHT - 2 * BIGWID - 40) / 3))
     {
@@ -121,43 +127,233 @@ void gSnake::GameInit()
 void gSnake::SnakeGameInit()
 {
     US usFlag;
-    US usFlag2;
+
     DIRECTION ysDtion;
     srand((unsigned)time(NULL));
     usFlag = rand() % m_vecLattice.size();
-    usFlag2 = rand() % m_vecLattice.size();
+
     ysDtion = (DIRECTION)(rand() % 4);
     m_Dtion = ysDtion;
-    switch (ysDtion)
-    {
-    case UPDIREXTION:
-        putimage(m_vecLattice[usFlag].x, m_vecLattice[usFlag].y, &RUP);
-        break;
-    case DOWNDIRECTION:
-        putimage(m_vecLattice[usFlag].x, m_vecLattice[usFlag].y, &RDOWN);
-        break;
-    case LEFTDIRECTION:
-        putimage(m_vecLattice[usFlag].x, m_vecLattice[usFlag].y, &RLEFT);
-        break;
-    case RIGHTDIRECTION:
-        putimage(m_vecLattice[usFlag].x, m_vecLattice[usFlag].y, &RRIGHT);
-        break;
-    }
-    if (usFlag == usFlag2)
-    {
-        usFlag2 = rand() % m_vecLattice.size();
-    }
-    putimage(m_vecLattice[usFlag2].x, m_vecLattice[usFlag2].y, &RFOOD);
+
+    m_vecSnakeLa.push_back(m_vecLattice[usFlag]); //蛇头
+
+    ShowHead(ysDtion, 0);
+
+    ProduceFood();
 }
 
+void gSnake::ProduceFood()
+{
+    bool bFlag =  true;
+
+    srand((unsigned)time(NULL));
+    m_usFFlag = rand() % m_vecLattice.size();
+    while (bFlag)
+    {
+        for (auto &it : m_vecSnakeLa)
+        {
+            if (it.x == m_vecLattice[m_usFFlag].x && it.y == m_vecLattice[m_usFFlag].y)
+            {
+                m_usFFlag = rand() % m_vecLattice.size();
+                bFlag = true;
+                break;
+            }
+            bFlag = false;
+        }
+    }
+    putimage(m_vecLattice[m_usFFlag].x, m_vecLattice[m_usFFlag].y, &RFOOD);
+}
+
+void gSnake::ShowHead(DIRECTION dt, US flag) //显示头部
+{
+    US i = 0;
+    switch (dt)
+    {
+    case UPDIREXTION:
+        putimage(m_vecSnakeLa[flag].x, m_vecSnakeLa[flag].y, &RUP);
+        break;
+    case DOWNDIRECTION:
+        putimage(m_vecSnakeLa[flag].x, m_vecSnakeLa[flag].y, &RDOWN);
+        break;
+    case LEFTDIRECTION:
+        putimage(m_vecSnakeLa[flag].x, m_vecSnakeLa[flag].y, &RLEFT);
+        break;
+    case RIGHTDIRECTION:
+        putimage(m_vecSnakeLa[flag].x, m_vecSnakeLa[flag].y, &RRIGHT);
+        break;
+    }
+    for (auto &it : m_vecSnakeLa)
+    {
+        if (i++)
+        {
+            putimage(it.x, it.y, &RSNAKE);
+        }
+    }
+}
+
+void gSnake::SnakePosition()
+{
+    struct lattice it;
+    for (int i = m_vecSnakeLa.size() - 1; i > 0; i--)
+    {
+        it = m_vecSnakeLa[i - 1];
+        m_vecSnakeLa[i] = it;
+    }
+}
+
+bool gSnake::SnakeIsDeath()
+{
+    US i = 0;
+    for (auto &it : m_vecSnakeLa)
+    {
+        if (i++)
+        {
+            if (it.x == m_vecSnakeLa[0].x && it.y == m_vecSnakeLa[0].y)
+            {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+bool gSnake::SnakeRunDirection(DIRECTION dt)
+{
+    bool bFlag = true;
+    m_snakeEnd = m_vecSnakeLa.back();
+
+    switch (dt)
+    {
+    case UPDIREXTION:
+        if (m_vecSnakeLa[0].y == 10)
+        {
+            bFlag = false;
+        }
+        else
+        {
+            SnakePosition();
+            m_vecSnakeLa[0].y -= 20;
+        }
+        break;
+    case DOWNDIRECTION:
+        if (m_vecSnakeLa[0].y == WIDTH - 30)
+        {
+            bFlag = false;
+        }
+        else
+        {
+            SnakePosition();
+            m_vecSnakeLa[0].y += 20;
+        }
+        break;
+    case LEFTDIRECTION:
+        if (m_vecSnakeLa[0].x == 10)
+        {
+            bFlag = false;
+        }
+        else
+        {
+            SnakePosition();
+            m_vecSnakeLa[0].x -= 20;
+        }
+        break;
+    case RIGHTDIRECTION:
+        if (m_vecSnakeLa[0].x == WIDTH - 30)
+        {
+            bFlag = false;
+        }
+        else
+        {
+            SnakePosition();
+            m_vecSnakeLa[0].x += 20;
+        }
+        break;
+    }
+
+    if (m_vecSnakeLa.size() > 1)
+    {
+        if (m_Dtion == dt - 2 || m_Dtion == dt + 2)
+        {
+            bFlag = false;
+        }
+    }
+
+    if (!SnakeIsDeath())
+    {
+        bFlag = false;
+    }
+
+    ShowHead(dt);
+    return bFlag;
+}
 
 void gSnake::GameRun()
 {
+    bool bFlag = true;
+    DIRECTION dt = NONEDIRECTION;
+    US usTime = 1;
     SnakeGameInit();
     _getch();
-    /* while (1)
-     {
+    while (bFlag)
+    {
+        peekmessage(&m_message);
+        if (m_message.message == WM_KEYDOWN)
+        {
+            switch (m_message.vkcode)
+            {
+            case KEYUP:
+                dt = (UPDIREXTION);
+                break;
+            case KEYDOWN:
+                dt = (DOWNDIRECTION);
+                break;
+            case KEYLEFT:
+                dt = (LEFTDIRECTION);
+                break;
+            case KEYRIGHT:
+                dt = (RIGHTDIRECTION);
+                break;
+            default:
+                break;
+            }
+        }
 
-     }*/
+        Sleep(1);
+        usTime++;
+        if (usTime > 100)
+        {
+            if (dt != NONEDIRECTION)
+            {
+                bFlag = SnakeRunOne(dt);
+            }
+            usTime = 1;
+        }
+    }
+
+    m_vecLattice.swap(std::vector<struct lattice>());
+    m_vecSnakeLa.swap(std::vector<struct lattice>());
 }
 
+bool gSnake::SnakeRunOne(DIRECTION dt)
+{
+    bool bFlag;
+
+    if (!SnakeRunDirection(dt))
+    {
+        return false;
+    }
+
+    if (m_vecSnakeLa[0].x == m_vecLattice[m_usFFlag].x && m_vecSnakeLa[0].y == m_vecLattice[m_usFFlag].y)
+    {
+        ProduceFood();
+        m_vecSnakeLa.push_back(m_snakeEnd);
+        putimage(m_snakeEnd.x, m_snakeEnd.y, &RSNAKE);
+    }
+    else
+    {
+        setfillcolor(RGB(255, 0, 0));
+        fillrectangle(m_snakeEnd.x, m_snakeEnd.y, m_snakeEnd.x + 20, m_snakeEnd.y + 20);
+    }
+    m_Dtion = dt;
+    return true;
+}
