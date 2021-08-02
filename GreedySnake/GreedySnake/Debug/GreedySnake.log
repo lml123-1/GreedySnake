@@ -1,10 +1,16 @@
-﻿  snake.cpp
+﻿  modSnake.cpp
+e:\study file\greedysnake\greedysnake\include\snake.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+  正在生成代码...
+  正在编译...
+  main.cpp
+e:\study file\greedysnake\greedysnake\include\snake.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+  snake.cpp
 e:\study file\greedysnake\greedysnake\src\snake.cpp : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
 e:\study file\greedysnake\greedysnake\include\snake.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
 e:\study file\greedysnake\greedysnake\src\snake.cpp(133): warning C4267: “=”: 从“size_t”转换到“unsigned short”，可能丢失数据
 e:\study file\greedysnake\greedysnake\src\snake.cpp(150): warning C4267: “=”: 从“size_t”转换到“unsigned short”，可能丢失数据
 e:\study file\greedysnake\greedysnake\src\snake.cpp(157): warning C4267: “=”: 从“size_t”转换到“unsigned short”，可能丢失数据
 e:\study file\greedysnake\greedysnake\src\snake.cpp(339): warning C4101: “bFlag”: 未引用的局部变量
-cl : 命令行 warning D9028: 最小重新生成失败，正在转换为标准生成
+  正在生成代码...
   GreedySnake.vcxproj -> E:\study file\GreedySnake\GreedySnake\Debug\GreedySnake.exe
   GreedySnake.vcxproj -> E:\study file\GreedySnake\GreedySnake\Debug\GreedySnake.pdb (Partial PDB)
